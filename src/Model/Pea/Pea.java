@@ -1,62 +1,41 @@
 package Model.Pea;
 
-import Model.Zombie.Zombie;
 import View.Game.GamePanel;
+import View.View;
 
 import java.awt.*;
 
 /**
  * Created by Armin on 6/25/2016.
  */
-public class Pea {
+public abstract class Pea implements PeaStrategy{
+    protected int positionX;
+    protected int myLane;
+    protected Image image;
 
-    private int posX;
-    protected GamePanel gp;
-    private int myLane;
-
-    public Pea(GamePanel parent, int lane, int startX) {
-        this.gp = parent;
+    public Pea(GamePanel parent, int lane, int startPositionX) {
         this.myLane = lane;
-        posX = startX;
+        this.positionX = startPositionX;
+        setImage();
     }
 
-    public void advance() {
-        Rectangle pRect = new Rectangle(posX, 130 + myLane * 120, 28, 28);
-        for (int i = 0; i < gp.getLaneZombies().get(myLane).size(); i++) {
-            Zombie z = gp.getLaneZombies().get(myLane).get(i);
-            Rectangle zRect = new Rectangle(z.getPosX(), 109 + myLane * 120, 400, 120);
-            if (pRect.intersects(zRect)) {
-                z.setHealth(z.getHealth() - 300);
-                boolean exit = false;
-                if (z.getHealth() < 0) {
-                    System.out.println("ZOMBIE DIED");
-
-                    gp.getLaneZombies().get(myLane).remove(i);
-                    GamePanel.setProgress(10);
-                    exit = true;
-                }
-                gp.getLaneZombies().get(myLane).remove(this);
-                if (exit) break;
-            }
-        }
-        /*if(posX > 2000){
-            gp.lanePeas.get(myLane).remove(this);
-        }*/
-        posX += 15;
+    public void draw(int x, int y, Graphics graphics) {
+        graphics.drawImage(this.image, x, y, null);
     }
 
-    public int getPosX() {
-        return posX;
-    }
+    protected abstract void setImage();
+    public abstract int getPower();
+    public abstract void advance();
 
-    public void setPosX(int posX) {
-        this.posX = posX;
+    public int getPositionX() {
+        return positionX;
     }
-
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
     public int getMyLane() {
         return myLane;
     }
-
     public void setMyLane(int myLane) {
         this.myLane = myLane;
     }
