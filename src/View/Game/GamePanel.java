@@ -67,8 +67,9 @@ public class GamePanel extends JLayeredPane implements MouseMotionListener {
 
     private int mouseX, mouseY;
     private int sunScore;
+    private static GamePanel gamePanel = null;
 
-    public GamePanel(JLabel sunScoreboard) {
+    private GamePanel() {
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setLayout(null);
         addMouseMotionListener(this);
@@ -85,13 +86,18 @@ public class GamePanel extends JLayeredPane implements MouseMotionListener {
         setTimer();
     }
 
-    public int getSunScore() {
+	public int getSunScore() {
         return sunScore;
     }
 
     public void setSunScore(int sunScore) {
         this.sunScore = sunScore;
         sunScoreboard.setText(String.valueOf(sunScore));
+    }
+    
+    public static GamePanel getInstance() {
+    	if(gamePanel==null) gamePanel = new GamePanel();
+    	return gamePanel;
     }
 
     public ArrayList<ArrayList<Zombie>> makeLaneZombies() {
